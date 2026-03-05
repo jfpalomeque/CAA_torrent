@@ -1,0 +1,103 @@
+schema_version: "1.0"
+description: >
+  Canonical field definitions for dataset metadata entries used in the
+  CAA torrent workspace. All datasets must follow these requirements so
+  automated tooling can validate and publish them consistently.
+fields:
+  id:
+    type: string
+    required: true
+    format: lowercase letters, digits, and hyphens (e.g., jrdr-2026-002)
+  title:
+    type: string
+    required: true
+    min_length: 5
+  version:
+    type: string
+    required: true
+    format: semantic or descriptive version tag (e.g., "1.0")
+  description:
+    type: string
+    required: true
+    style: multi-line block scalar allowed (YAML ">" or "|")
+  authors:
+    type: list
+    required: true
+    min_items: 1
+    items:
+      type: mapping
+      fields:
+        name:
+          type: string
+          required: true
+  license:
+    type: string
+    required: true
+    format: SPDX identifier (e.g., CC-BY-4.0)
+  publication_date:
+    type: string
+    required: true
+    format: ISO 8601 calendar date YYYY-MM-DD
+  language:
+    type: string
+    required: true
+    format: ISO 639-1 code (e.g., "en")
+  keywords:
+    type: list
+    required: true
+    min_items: 1
+    items:
+      type: string
+  related_publications:
+    type: list
+    required: false
+    items:
+      type: mapping
+      fields:
+        title:
+          type: string
+          required: true
+        doi:
+          type: string
+          required: false
+          format: DOI string
+        url:
+          type: string
+          required: false
+          format: HTTPS URL
+        conference:
+          type: string
+          required: false
+  data_origin:
+    type: mapping
+    required: true
+    fields:
+      source_project:
+        type: string
+        required: true
+      field_season:
+        type: string
+        required: true
+      location:
+        type: string
+        required: true
+      coordinate_reference_system:
+        type: string
+        required: true
+        format: EPSG code or descriptive text (e.g., "EPSG:4326", "N/A")
+  files:
+    type: list
+    required: false
+    items:
+      type: mapping
+      fields:
+        path:
+          type: string
+          required: true
+        description:
+          type: string
+          required: true
+  how_to_cite:
+    type: string
+    required: true
+    style: multi-line block scalar allowed for full citation text
