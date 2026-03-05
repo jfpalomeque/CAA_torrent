@@ -10,4 +10,5 @@ wheels/
 .venv
 /marks
 /trenches_examples
-
+/temp
+/final

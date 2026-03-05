@@ -203,6 +203,7 @@ def create_zip_file(dataset_dir):
     temp_dir = os.path.join(os.getcwd(), "temp")
     os.makedirs(temp_dir, exist_ok=True)
     zip_uuid_str = str(uuid.uuid4())
+    print(f"Zip file UUID: {zip_uuid_str}")
     zip_filename = f"{zip_uuid_str}.zip"
     zip_dir = os.path.join(temp_dir, zip_uuid_str)
     os.makedirs(zip_dir, exist_ok=True)
@@ -211,20 +212,39 @@ def create_zip_file(dataset_dir):
     # Copy all files from the dataset directory to dir /files in the zip directory, except the metadata file.
     files_dir = os.path.join(zip_dir, "files")
     os.makedirs(files_dir, exist_ok=True)
+    file_entries = []
+
+    def _file_sha256(path, chunk_size=8192):
+        digest = hashlib.sha256()
+        with open(path, "rb") as f:
+            for chunk in iter(lambda: f.read(chunk_size), b""):
+                digest.update(chunk)
+        return digest.hexdigest()
+
     for root, dirs, files in os.walk(dataset_dir):
-        for file in files:
+        for n, file in enumerate(files, start=1):
+            print(f"Processing file: {file}, {n} of {len(files)} in directory {root}")
             if file != "metadata.yaml":
                 src_path = os.path.join(root, file)
-                dst_path = os.path.join(files_dir, os.path.relpath(src_path, dataset_dir))
+                rel_path = os.path.relpath(src_path, dataset_dir)
+                dst_path = os.path.join(files_dir, rel_path)
                 os.makedirs(os.path.dirname(dst_path), exist_ok=True)
                 shutil.copy2(src_path, dst_path)
+                size_bytes = os.path.getsize(dst_path)
+                file_entries.append(
+                    {
+                        "rel_path": rel_path.replace(os.sep, "/"),
+                        "size_bytes": size_bytes,
+                        "sha256": _file_sha256(dst_path),
+                    }
+                )
 
     # Use the shutil module to create a zip file of the dataset, not including the metadata file, using an UUID as the name of the zip file.
     archive_base = os.path.splitext(zip_filepath)[0]
+    print(f"Creating zip file at: {zip_filepath}")
     shutil.make_archive(base_name=archive_base, format="zip", root_dir=files_dir)
     
-    # Remove the temporary directory with the files, but keep the zip file and the metadata file in the zip directory.
-    shutil.rmtree(files_dir)
+    
     
     
     # Update the metadata file in the zip directory to include the name of the zip file, the size of the zip file in bytes,
@@ -236,6 +256,16 @@ def create_zip_file(dataset_dir):
         metadata = yaml.safe_load(f)
     with open(zip_filepath, "rb") as f:
         zip_hash = hashlib.sha256(f.read()).hexdigest()
+    metadata["manifests"] = {
+        "files": {
+            entry["rel_path"]: {
+                "path": "/".join(["files", entry["rel_path"]]),
+                "size_bytes": entry["size_bytes"],
+                "sha256": entry["sha256"],
+            }
+            for entry in file_entries
+        }
+    }
     metadata["zip_file"] = {
         "uuid": zip_uuid_str,
         "size_bytes": os.path.getsize(zip_filepath),
@@ -258,7 +288,9 @@ def create_zip_file(dataset_dir):
     
     shutil.make_archive(base_name=global_zip_base, format="zip", root_dir=zip_dir)
     print(f"Packaged dataset archive created at: {global_zip_filepath}")
-    return global_zip_filepath, zip_filepath, zip_metadata_file
+    # Remove the temporary directory with the files, but keep the zip file and the metadata file in the zip directory.
+    shutil.rmtree(files_dir)
+    return global_zip_filepath, zip_filepath, zip_metadata_file, zip_uuid_str
 
 # Create a torrent file from the zip file created in the previous step, using the libtorrent library. 
 # The torrent file will be created in the same directory as the zip file, with the same name as the zip file but with the extension .torrent.
@@ -286,38 +318,56 @@ def create_torrent_file(zip_filepath):
     
     print(f"Torrent file created at: {torrent_filename}")
     
-    # Create magnet link for the torrent file and print it to the console.
-
-    magnet_link = lt.make_magnet_uri(lt.torrent_info(torrent_filename))
+    torrent_info = lt.torrent_info(torrent_filename)
+    magnet_link = lt.make_magnet_uri(torrent_info)
+    try:
+        infohash_v1 = str(torrent_info.info_hashes().v1)
+    except AttributeError:
+        infohash_v1 = str(torrent_info.info_hash())
     print(f"Magnet link: {magnet_link}")
     
-    return torrent_filename, magnet_link
+    return torrent_filename, magnet_link, infohash_v1
 
 # Save in dir /final the zip file,  zip_metadata_fileand the torrent file created in the previous steps, 
 # with the same name as the zip file but with the extension .zip and .torrent respectively.
-def save_final_files(zip_metadata_file ,global_zip_filepath, torrent_filename, magnet_link):
-    final_dir = os.path.join("final", os.path.dirname(__file__))
+def save_final_files(zip_metadata_file ,global_zip_filepath, torrent_filename, magnet_link, infohash_v1, zip_uuid_str):
+    final_dir = os.path.join( os.path.dirname(__file__),"final", zip_uuid_str)
     os.makedirs(final_dir, exist_ok=True)
     
     with open(zip_metadata_file) as f:
         metadata = yaml.safe_load(f)
+    torrent_info = lt.torrent_info(torrent_filename)
+    tracker_urls = [tracker.url for tracker in torrent_info.trackers()]
     metadata["torrent"] = {
-        "torrent_filename": torrent_filename,
+        "torrent_filename": os.path.basename(torrent_filename),
+        "infohash_v1": infohash_v1,
         "magnet_link": magnet_link,
+        "trackers": tracker_urls,
         "size_bytes": os.path.getsize(global_zip_filepath),
         "creation_date": datetime.now().isoformat()
     }
-    with open(zip_metadata_file, "w", encoding="utf-8") as f:
+    
+    final_metadata_file = os.path.join(final_dir, f"{zip_uuid_str}_metadata.yaml")
+    with open(final_metadata_file, "w", encoding="utf-8") as f:
         yaml.safe_dump(metadata, f, sort_keys=False)
 
     shutil.copy2(global_zip_filepath, final_dir)
-    
     shutil.copy2(torrent_filename, final_dir)
+    print(f"Final files saved in: {final_dir}")
+    print(f"Zip file: {os.path.basename(global_zip_filepath)}")
+    print(f"Metadata file: {os.path.basename(final_metadata_file)}")
+    print(f"Torrent file: {os.path.basename(torrent_filename)}")
 
     print(f"Files saved in: {final_dir}")
 
-
-
+# Delete all content on directory /temp: 
+def cleanup_temporary_files(zip_filepath, zip_metadata_file):
+    temp_dir = os.path.join(os.path.dirname(__file__), "temp")
+    if os.path.exists(temp_dir):
+        shutil.rmtree(temp_dir)
+        print(f"Temporary files in '{temp_dir}' have been cleaned up.")
+    else:
+        print(f"No temporary files found in '{temp_dir}' to clean up.")
 
 
 
@@ -330,6 +380,7 @@ if __name__ == "__main__":
     print(f"Total size of the dataset: {total_size} bytes")
     print(f"Average file size: {average_file_size} bytes")
     check_metadata_format(dataset_dir, schema_file)
-    global_zip_filepath, zip_filepath, zip_metadata_file = create_zip_file(dataset_dir)
-    torrent_filename, magnet_link = create_torrent_file(global_zip_filepath)
-    save_final_files(zip_metadata_file, global_zip_filepath, torrent_filename, magnet_link)
+    global_zip_filepath, zip_filepath, zip_metadata_file, zip_uuid_str = create_zip_file(dataset_dir)
+    torrent_filename, magnet_link, infohash_v1 = create_torrent_file(global_zip_filepath)
+    save_final_files(zip_metadata_file, global_zip_filepath, torrent_filename, magnet_link, infohash_v1, zip_uuid_str)
+    cleanup_temporary_files(zip_filepath, zip_metadata_file)
