@@ -1,10 +1,10 @@
 {
   "title": "CAA Torrent Pipeline: decentralised archaeological data sharing proof of concept",
   "upload_type": "software",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publication_date": "2026-10-16",
   "access_right": "open",
-  "description": "Fixed software release associated with the CAA 2026 paper on decentralised archaeological data sharing using peer-to-peer and BitTorrent technologies. The Python workflow validates dataset metadata, packages datasets into verifiable archives, generates SHA-256 manifests, creates torrent files and magnet links, and records structured metadata for decentralised distribution. The original experimental dataset payloads are not stored in this software archive; the exact magnet URIs and infohashes used in the public experiment are preserved in MAGNETS.md.",
+  "description": "Version 0.1.1 of the software and reproducibility materials associated with the CAA 2026 paper on decentralised archaeological data sharing using peer-to-peer and BitTorrent technologies. The archive includes the Python workflow, metadata schema and tracker configuration, the exact magnet URIs and torrent identifiers used in the public experiment, and a machine-readable transcription of the aggregate experimental observations retained from the study. Measurements that were not retained contemporaneously are explicitly identified rather than reconstructed. The original experimental dataset payloads are not stored in this software archive.",
   "creators": [
     {
       "name": "Palomeque-Gonzalez, Juan Francisco"
@@ -16,7 +16,8 @@
     "peer-to-peer",
     "research data management",
     "open science",
-    "digital archaeology"
+    "digital archaeology",
+    "reproducibility"
   ],
   "related_identifiers": [
     {
@@ -24,5 +25,6 @@
       "relation": "isSupplementTo",
       "scheme": "url"
     }
-  ]
+  ],
+  "license": "MIT"
 }
