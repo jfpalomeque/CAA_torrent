@@ -20,6 +20,9 @@ Proof-of-concept workflow for packaging archaeological datasets into verifiable 
 - `uv.lock`: locked dependency environment used for reproducibility.
 - `CITATION.cff`: citation metadata for the software.
 - `.zenodo.json`: metadata prepared for software archiving in Zenodo.
+- `MAGNETS.md`: exact magnet URIs and torrent identifiers used in the public experiment.
+- `experiment_observations.csv`: machine-readable transcription of the aggregate observations retained from the experiment.
+- `EXPERIMENT_DATA.md`: provenance and limitations for the experimental observation table.
 
 ## Requirements
 - Python 3.12+
@@ -83,7 +86,9 @@ uv run .\dataset_torrent_pipeline.py -dir path/to/dataset [-schema path/to/custo
 - The pipeline excludes `metadata.yaml` from the packaged files but embeds it, with manifests, in the release bundle.
 
 ## Research archive
-The fixed software release associated with the CAA 2026 proceedings paper is archived on Zenodo at **https://doi.org/10.5281/zenodo.23418512**. The original experimental dataset payloads are not stored in this repository. Their exact BitTorrent magnet URIs and infohashes are preserved in [`MAGNETS.md`](MAGNETS.md). No retrospective or reconstructed monitoring data are included in the archive.
+The fixed v0.1.0 software release associated with the CAA 2026 proceedings paper is archived on Zenodo at **https://doi.org/10.5281/zenodo.23418512**. The original experimental dataset payloads are not stored in this repository. Their exact BitTorrent magnet URIs and infohashes are preserved in [`MAGNETS.md`](MAGNETS.md).
+
+The current repository also includes [`experiment_observations.csv`](experiment_observations.csv) and [`EXPERIMENT_DATA.md`](EXPERIMENT_DATA.md), which document the aggregate observations retained from the public proof-of-concept experiment. Missing measurements are explicitly marked rather than reconstructed retrospectively. These files were added after the v0.1.0 Zenodo release and are intended for the next versioned archival deposit.
 
 ## Author
 Created by Juan Francisco Palomeque-Gonzalez  
