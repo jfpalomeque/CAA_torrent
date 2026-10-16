@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the archived release associated with the CAA 2026 paper."
+title: "CAA Torrent Pipeline"
+type: software
+authors:
+  - family-names: "Palomeque-Gonzalez"
+    given-names: "Juan Francisco"
+repository-code: "https://github.com/jfpalomeque/CAA_torrent"
+version: "0.1.0"
+date-released: "2026-10-16"

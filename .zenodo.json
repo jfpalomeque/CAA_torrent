@@ -1,0 +1,25 @@
+{
+  "title": "CAA Torrent Pipeline: decentralised archaeological data sharing proof of concept",
+  "upload_type": "software",
+  "description": "Proof-of-concept Python workflow developed for the CAA 2026 paper on decentralised archaeological data sharing using peer-to-peer and BitTorrent technologies. The software validates dataset metadata, packages datasets into verifiable archives, generates SHA-256 manifests, creates torrent files and magnet links, and records structured metadata for decentralised distribution.",
+  "creators": [
+    {
+      "name": "Palomeque-Gonzalez, Juan Francisco"
+    }
+  ],
+  "keywords": [
+    "archaeology",
+    "BitTorrent",
+    "peer-to-peer",
+    "research data management",
+    "open science",
+    "digital archaeology"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/jfpalomeque/CAA_torrent",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
