@@ -1,7 +1,7 @@
 [project]
 name = "caa-torrent"
 version = "0.1.0"
-description = "Add your description here"
+description = "Proof-of-concept pipeline for packaging archaeological datasets into verifiable ZIP archives and BitTorrent releases."
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
