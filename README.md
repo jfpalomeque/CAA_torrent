@@ -81,7 +81,7 @@ uv run .\dataset_torrent_pipeline.py -dir path/to/dataset [-schema path/to/custo
 - The pipeline excludes `metadata.yaml` from the packaged files but embeds it, with manifests, in the release bundle.
 
 ## Research archive
-The fixed software version associated with the CAA 2026 proceedings paper is intended to be archived in Zenodo together with the exact CSV research data used in the experiment where redistribution is permitted. No retrospective or reconstructed monitoring data are included in the archive.
+The fixed software version associated with the CAA 2026 proceedings paper is intended to be archived in Zenodo as a software release. The original experimental dataset payloads are not stored in this repository. Their exact BitTorrent magnet URIs and infohashes are preserved in [`MAGNETS.md`](MAGNETS.md). No retrospective or reconstructed monitoring data are included in the archive.
 
 ## Author
 Created by Juan Francisco Palomeque-Gonzalez  
