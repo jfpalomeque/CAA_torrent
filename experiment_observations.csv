@@ -1,0 +1,31 @@
+category,item,metric,value,unit,timing,provenance_note
+dataset,Pandora,payload_size,244,KB,,Recorded in experiment notes
+dataset,Pandora,file_count,1,files,,Recorded in experiment notes
+dataset,Pandora,piece_size,16,KB,,Recorded in experiment notes
+dataset,Pandora,piece_count,not retained,,,No numeric piece count was retained
+dataset,3D trench models,payload_size,470,MB,,Recorded in experiment notes
+dataset,3D trench models,file_count,21,files,,Recorded in experiment notes
+dataset,3D trench models,piece_size,256,KB,,Recorded in experiment notes
+dataset,3D trench models,piece_count,1880,pieces,,Recorded in experiment notes
+seeding,both,initial_seeder,personal computer,,,Recorded in experiment notes
+seeding,both,upload_bandwidth_limit,none,,,Recorded in experiment notes
+seeding,both,measured_upstream_bandwidth,74.3,Mbps,,Reported residential connection capacity
+seeding,both,DHT,enabled,,,Recorded in experiment notes
+seeding,both,tracker_count,2,trackers,,Recorded in experiment notes
+seeding,both,tracker_1,udp://tracker.opentrackr.org:1337/announce,,,From torrent_config.yaml
+seeding,both,tracker_2,udp://open.stealth.si:80/announce,,,From torrent_config.yaml
+swarm,Pandora,seeders,76,count,approximately 24 h after publication,Only the approximately 24 h count was retained
+swarm,3D trench models,seeders,81,count,approximately 24 h after publication,Only the approximately 24 h count was retained
+swarm,both,all_connected_peers_reported_as_seeders,yes,,approximately 24 h after publication,Recorded in experiment notes
+download,both,observed_download_speed,>25,MB/s,,Single retained threshold observation; repeated or dataset-specific throughput series not retained
+integrity,both,downloaded_archives_extracted_successfully,yes,,,Recorded in experiment notes
+reddit,r/AskArchaeology,views,1000,views,approximately 24 h after publication,Reddit Post Insights
+reddit,r/Torrent,views,13000,views,approximately 24 h after publication,Reddit Post Insights
+reddit,r/Torrenting,views,5100,views,approximately 24 h after publication,Reddit Post Insights
+reddit,r/DataHoarder,views,10000,views,approximately 24 h after publication,Reddit Post Insights
+reddit,r/AskArchaeology,upvotes,2,upvotes,approximately 24 h after publication,Reddit Post Insights
+reddit,r/Torrent,upvotes,44,upvotes,approximately 24 h after publication,Reddit Post Insights
+reddit,r/Torrenting,upvotes,15,upvotes,approximately 24 h after publication,Reddit Post Insights
+reddit,r/AskArchaeology,comments,5,comments,approximately 24 h after publication,Reddit Post Insights
+reddit,r/Torrent,comments,15,comments,approximately 24 h after publication,Reddit Post Insights
+reddit,r/Torrenting,comments,18,comments,approximately 24 h after publication,Reddit Post Insights
