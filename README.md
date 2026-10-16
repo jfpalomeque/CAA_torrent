@@ -2,7 +2,7 @@
 
 Proof-of-concept workflow for packaging archaeological datasets into verifiable ZIP archives and BitTorrent releases. Built for the 2026 CAA conference in Vienna, it validates dataset metadata, builds reproducible archives, and emits `.torrent` files so datasets can be shared peer-to-peer.
 
-**Archived release:** https://doi.org/10.5281/zenodo.23418512
+**Archived release (v0.1.1):** https://doi.org/10.5281/zenodo.23420488
 
 ## What it does
 - Takes a dataset folder containing a `metadata.yaml` and associated files. This script considers all files in the folder except `metadata.yaml` as part of the dataset to be packaged.
@@ -85,9 +85,9 @@ uv run .\dataset_torrent_pipeline.py -dir path/to/dataset [-schema path/to/custo
 - The pipeline excludes `metadata.yaml` from the packaged files but embeds it, with manifests, in the release bundle.
 
 ## Research archive
-The fixed v0.1.0 software release associated with the CAA 2026 proceedings paper is archived on Zenodo at **https://doi.org/10.5281/zenodo.23418512**. The original experimental dataset payloads are not stored in this repository. Their exact BitTorrent magnet URIs and infohashes are preserved in [`MAGNETS.md`](MAGNETS.md).
+The current archival release, v0.1.1, is available on Zenodo at **https://doi.org/10.5281/zenodo.23420488**. It includes the software, [`MAGNETS.md`](MAGNETS.md), and [`experiment_observations.csv`](experiment_observations.csv), a machine-readable transcription of the aggregate observations retained from the public proof-of-concept experiment. Missing measurements are explicitly marked rather than reconstructed retrospectively. The original experimental dataset payloads are not stored in the repository or Zenodo archive; their exact BitTorrent magnet URIs and infohashes are preserved in `MAGNETS.md`.
 
-The current repository also includes [`experiment_observations.csv`](experiment_observations.csv), a machine-readable transcription of the aggregate observations retained from the public proof-of-concept experiment. Missing measurements are explicitly marked rather than reconstructed retrospectively. This file was added after the v0.1.0 Zenodo release and is intended for the next versioned archival deposit.
+The previous v0.1.0 archive remains available at **https://doi.org/10.5281/zenodo.23418512**.
 
 ## Author
 Created by Juan Francisco Palomeque-Gonzalez  
